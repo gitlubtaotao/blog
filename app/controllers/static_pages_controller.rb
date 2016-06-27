@@ -1,4 +1,5 @@
 class StaticPagesController < ApplicationController
+  #layout  false
   def home
   end
 
@@ -7,5 +8,11 @@ class StaticPagesController < ApplicationController
   # Add Test
   def about
   end 
+  
+  def contract
+  end
+  
+  	
+
   
 end
