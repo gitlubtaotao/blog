@@ -43,7 +43,8 @@ private
      def valid_user
         unless (@user  && @user.activated? &&
                         @user.authenticated?(:reset, params[:id]))
-        redirect_to root_url
+          redirect_to root_url
+        end
       end
        # 检查重设令牌是否过期
        def check_expiration

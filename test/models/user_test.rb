@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  has_many  :microposts
 	def setup
 		@user = User.new(name:  "Example", email: "user@example.com",
 				      password: "foobar", password_confirmation: "foobar")
