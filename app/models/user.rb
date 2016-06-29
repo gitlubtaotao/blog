@@ -1,7 +1,21 @@
 class User < ActiveRecord::Base
-  has_many :microposts, dependent: :destroy
+  #删除用户时，需要删除用户对应的微博和关系，所以添加dependent: :destroy
+  has_many  :microposts, dependent: :destroy
+  #获取我关注的人
+ has_many :active_relationships,  class_name:  "Relationship",
+                                                            foreign_key: "follower_id",
+                                                            dependent:   :destroy
+  has_many  :following,  through:   :active_relationships,  source:  :followed
+
+  #获取关注我的人
+  has_many  :passive_relationships,  class_name:  "Relationship",
+                                                                foreign_key:  "followed_id",
+                                                                dependent:    :destroy
+  has_many :followers,  through:  :passive_relationships, source:  :follower
+  
+
   attr_accessor :remember_token,  :activation_token,  :reset_token
-  before_save   :downcase_email
+  before_save   :downcase_email#保存之前建国邮箱转化成小写字符
   before_create :create_activation_digest
 
   validates :name,  presence: true, length: { maximum: 50 }
@@ -73,9 +87,24 @@ class User < ActiveRecord::Base
       def password_reset_expired?
         reset_sent_at < 2.hours.ago
       end
+
       def feed
          Micropost.where("user_id = ?", id)
       end
+      #关注另一个用户
+      def  follow(other_user)
+          active_relationships.create(followed_id:  other_user.id)
+      end
+      #取消关注另一个用户
+      def unfollow(other_user)
+        active_relationships.find_by(followed_id: other_user.id).destroy
+      end
+      #如果当前用户关注了指定的用户，则返回true
+      def  following?(other_user)
+        following.include?(other_user)
+      end
+        
+     
   private
   # 把电子邮件地址转换成小写
     def downcase_email
@@ -87,7 +116,4 @@ class User < ActiveRecord::Base
        self.activation_token  = User.new_token
        self.activation_digest = User.digest(activation_token)
     end 
-  
-
-  
-end
+  end
