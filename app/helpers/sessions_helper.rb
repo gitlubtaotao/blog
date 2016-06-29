@@ -1,5 +1,5 @@
 module SessionsHelper
-	#
+	#当登录的用户写入session中
 	 def log_in(user)
     		session[:user_id] = user.id
   	end
