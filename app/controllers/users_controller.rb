@@ -66,6 +66,8 @@ def followers
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow'
   end
+
+
   
   private
       def user_params
