@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
 
   # 为了持久会话，在数据库中记住用户
   def remember
-    self.remember_token = User.new_token
+    self.remember_token = User.new_token#获取随机令牌
     update_attribute(:remember_digest, User.digest(remember_token))
   end
 
@@ -74,7 +74,7 @@ class User < ActiveRecord::Base
       def create_reset_digest
         self.reset_token = User.new_token
         update_attribute(:reset_digest,  User.digest(reset_token))
-        update_attribute(:reset_sent_at, Time.zone.now)
+        update_attribute(:reset_at, Time.zone.now)
       end
 
        # 发送密码重设邮件
@@ -85,7 +85,7 @@ class User < ActiveRecord::Base
 
      # 如果密码重设超时失效了，返回 true
       def password_reset_expired?
-        reset_sent_at < 2.hours.ago
+        reset_at < 2.hours.ago
       end
 
       def feed

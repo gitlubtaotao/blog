@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
+  #默认整个程序是使用layout/application.html.erb作为布局
   protect_from_forgery with: :exception
   include SessionsHelper
   private

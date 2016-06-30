@@ -7,7 +7,7 @@
      <%= render 'shared/error_messages', object: f.object %>
 
       <%= f.label :name %>
-      <%= f.text_field :name, class: 'form-control' %>
+      <%= f.text_field :name, class: 'form-control' ,readonly: "readonly"%>
 
       <%= f.label :email %>
       <%= f.email_field :email, class: 'form-control' %>

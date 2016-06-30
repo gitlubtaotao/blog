@@ -1,10 +1,8 @@
 Rails.application.routes.draw do
+  root 'static_pages#home'
   get 'password_resets/new'
-
   get 'password_resets/edit'
-
   get 'sessions/new'
-
   get 'users/new'
 
   #get 'static_pages/home'
@@ -12,7 +10,7 @@ Rails.application.routes.draw do
   # add test
   #get 'static_pages/about'
   #get 'static_pages/contact'
-  root 'static_pages#home'
+
   get 'help'    => 'static_pages#help'
   get 'about'   => 'static_pages#about'
   get 'contact' => 'static_pages#contact'
@@ -20,7 +18,7 @@ Rails.application.routes.draw do
   get    'login'   => 'sessions#new'
   post   'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
-  
+  #映射到UsersController中的following和followers的操作
   resources  :users do
     member do
       get  :following,  :followers
@@ -31,6 +29,7 @@ Rails.application.routes.draw do
   resources   :password_resets    ,only:  [:new,  :create,  :edit,   :update]
   resources   :microposts,               only: [:create,  :destroy]
   resources   :relationships,           only:  [:create,  :destroy]
+  mount RuCaptcha::Engine => "/rucaptcha"
   
   
   

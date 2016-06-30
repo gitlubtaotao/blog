@@ -34,8 +34,9 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:id])
   end  
-    #保存用户
-   def update
+
+  #保存用户
+  def update
         @user = User.find(params[:id])
        if @user.update_attributes(user_params)
           # 处理更新成功的情况
@@ -73,10 +74,18 @@ def followers
       def user_params
           params.require( :user).permit(:name, :email, :password, :password_confirmation)
       end 
+      #显示用户自己的信息
       def correct_user
         @user = User.find(params[:id])
-        redirect_to(root_url) unless @user == current_user
+        redirect_to(root_url) unless current_user?(@user)
     end
+    #确保是管理员
+    def admin_user
+
+         redirect_to(root_url) unless current_user.admin?
+          
+        end
+    
    
 
 end
