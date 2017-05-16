@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resource :wechat, only: [:show, :create]
   root 'static_pages#home'
   get 'password_resets/new'
   get 'password_resets/edit'
@@ -26,10 +27,10 @@ Rails.application.routes.draw do
   end
   
   resources  :account_activations, only: [:edit]
-  resources   :password_resets    ,only:  [:new,  :create,  :edit,   :update]
+  resources :password_resets,     only: [:new,   :create,   :edit,   :update]
   resources   :microposts,               only: [:create,  :destroy]
   resources   :relationships,           only:  [:create,  :destroy]
-  mount RuCaptcha::Engine => "/rucaptcha"
+  # mount RuCaptcha::Engine => "/rucaptcha"
   
   
   

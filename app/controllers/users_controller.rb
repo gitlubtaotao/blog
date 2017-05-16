@@ -72,7 +72,7 @@ def followers
   
   private
       def user_params
-          params.require( :user).permit(:name, :email, :password, :password_confirmation)
+          params.require( :user).permit(:name, :email, :password, :password_confirmation, :avatar)
       end 
       #显示用户自己的信息
       def correct_user

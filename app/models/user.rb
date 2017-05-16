@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 
   attr_accessor :remember_token,  :activation_token,  :reset_token
   before_save   :downcase_email#保存之前建国邮箱转化成小写字符
-  before_create :create_activation_digest
+  before_create :create_activation_digest#创建新用户时进行邮件认证
 
   validates :name,  presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -25,7 +25,8 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 },allow_nil: true
-
+  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: "/images/:style/missing.png"
+  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\z/
   # 返回指定字符串的哈希摘要
   # Returns the hash digest of the given string.
   def User.digest(string)
@@ -60,7 +61,7 @@ class User < ActiveRecord::Base
 
     # 激活账户
     def activate
-      update_attribute(:activated,      true)
+      update_attribute(:activated,      true) 
       update_attribute(:activated_at, Time.zone.now)
     end
 
@@ -71,11 +72,11 @@ class User < ActiveRecord::Base
 
 
       # 设置密码重设相关的属性
-      def create_reset_digest
+  def create_reset_digest
         self.reset_token = User.new_token
         update_attribute(:reset_digest,  User.digest(reset_token))
-        update_attribute(:reset_at, Time.zone.now)
-      end
+        update_attribute(:reset_sent_at, Time.zone.now)
+  end
 
        # 发送密码重设邮件
 
